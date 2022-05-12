@@ -1,0 +1,12 @@
+name: ErrorNotifications
+version: 1.0
+author: BaugIndustries
+main: org.baugindustries.errornotifications.Main
+api-version: 1.18
+description: Sends notifications to your email whenever an error occurs.
+
+commands:
+  toggle:
+   usage: /toggle
+   description: enables or disabled notifications
+   permission: minecraft.command.op
