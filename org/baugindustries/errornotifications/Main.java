@@ -2,6 +2,7 @@ package org.baugindustries.errornotifications;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Handler;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -42,34 +43,20 @@ public class Main extends JavaPlugin {
 		 
 		 boolean enabled = true;
 		 
-		 if (!config.contains("fromEmail")) {
+		 if (!config.contains("recipients")) {
 			 enabled = false;
-			 config.set("fromEmail", "");
+			 config.set("recipients", new ArrayList<String>());
 		 }
 		 
-		 if (!config.contains("emailPass")) {
-			 enabled = false;
-			 config.set("emailPass", "");
-		 }
-		 
-		 if (!config.contains("toEmail")) {
-			 enabled = false;
-			 config.set("toEmail", "");
-		 }
-		 
-		 if (config.getString("fromEmail").equals("")) {
-			 enabled = false;
-		 } else if (config.getString("toEmail").equals("")) {
-			 enabled = false;
-		 } else if (config.getString("emailPass").equals("")) {
+		 if (config.getString("recipients").length() == 0) {
 			 enabled = false;
 		 }
-		 
+		
 		 if (enabled) {
 			errors = new ErrorListener(this);
 			getServer().getLogger().addHandler(errors);
 		 } else {
-			getServer().getLogger().severe("ErrorNotifications: config.yml is incorrectly configured. Fill in the empty fields, and relaunch server to enable.");
+			getServer().getLogger().severe("ErrorNotifications: config.yml is incorrectly configured. Add recipient email addresses using /addrecipient, and relaunch server to enable.");
 		 }
 		 
 		try {
@@ -79,6 +66,9 @@ public class Main extends JavaPlugin {
 		}
 		
 		new ToggleEnable(this);
+		new AddRecipient(this);
+		new RemoveRecipient(this);
+		getCommand("removerecipient").setTabCompleter(new RemoveRecipientTabCompleter(this));
 		 
 	}
 	
